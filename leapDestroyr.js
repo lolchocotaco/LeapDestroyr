@@ -437,6 +437,8 @@ var SCREENTAP_START_SIZE = 30;
 	// Creates our Leap Controller
 	var controller = new Leap.Controller({enableGestures:true});
 
+	var scrolling = false;
+	var enableScroll = true;
 	var oldAvgFingerPos = [-1, -1];
 
 	// Tells the controller what to do every time it sees a frame
@@ -500,15 +502,27 @@ var SCREENTAP_START_SIZE = 30;
 				avgFingerPos[1] /= fingers;
 			}
 
-			if (fingers == 2) {
-				var dist = Math.sqrt(Math.pow(avgFingerPos[0] - oldAvgFingerPos[0], 2) + 
-					Math.pow(avgFingerPos[1] - oldAvgFingerPos[1], 2));
+			if (enableScroll) {
+				if (fingers == 2) {
+					var dist = Math.sqrt(Math.pow(avgFingerPos[0] - oldAvgFingerPos[0], 2) + 
+						Math.pow(avgFingerPos[1] - oldAvgFingerPos[1], 2));
 
-				if (dist < 50 && dist > 5) {
-					scrollBy(avgFingerPos[0] - oldAvgFingerPos[0], 
-					avgFingerPos[1] - oldAvgFingerPos[1]);
+					if (dist < 100 && dist > 8) {
+						scrollBy(avgFingerPos[0] - oldAvgFingerPos[0], 
+						-(avgFingerPos[1] - oldAvgFingerPos[1])); // natural scrolling
+						scrolling = true;
+					} else if (scrolling) {
+						scrolling = false;
+						enableScroll = false;
+						setTimeout(function() { enableScroll = true; }, 1000);
+					}
+				} else if (scrolling) {
+					scrolling = false;
+					enableScroll = false;
+					setTimeout(function() { enableScroll = true; }, 1000);
 				}
 			}
+			
 
 			oldAvgFingerPos = avgFingerPos;
 		}
