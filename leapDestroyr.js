@@ -156,7 +156,7 @@ var SCREENTAP_START_SIZE = 30;
       };
       this.body = document.getElementsByTagName("body")[0];
       this.state = 'planted';
-      this.count = 3;
+      this.count = 0;
       this.drop();
     }
 
