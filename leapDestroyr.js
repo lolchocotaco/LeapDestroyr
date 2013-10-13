@@ -149,20 +149,17 @@ var SCREENTAP_START_SIZE = 30;
     Bomb.SIZE = 50;
 
     function Bomb(x, y) {
-      this.countDown = __bind(this.countDown, this);
       this.drop = __bind(this.drop, this);      this.pos = {
         x: x,
         y: y
       };
       this.body = document.getElementsByTagName("body")[0];
       this.state = 'planted';
-      this.count = 0;
       this.drop();
     }
 
     Bomb.prototype.drop = function() {
       this.bomb = document.createElement("div");
-      this.bomb.innerHTML = this.count;
       this.body.appendChild(this.bomb);
       this.bomb.style['zIndex'] = "9999";
       this.bomb.style['fontFamily'] = "verdana";
@@ -182,18 +179,7 @@ var SCREENTAP_START_SIZE = 30;
       this.bomb.style['textAlign'] = "center";
       this.bomb.style['WebkitUserSelect'] = 'none';
       this.bomb.style['font-weight'] = 700;
-      return setTimeout(this.countDown, 1000);
-    };
-
-    Bomb.prototype.countDown = function() {
-      this.state = 'ticking';
-      this.count--;
-      this.bomb.innerHTML = this.count;
-      if (this.count > 0) {
-        return setTimeout(this.countDown, 1000);
-      } else {
-        return this.explose();
-      }
+      return this.explose();
     };
 
     Bomb.prototype.explose = function() {
