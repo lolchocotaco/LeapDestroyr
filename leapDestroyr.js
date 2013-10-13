@@ -423,7 +423,7 @@ var SCREENTAP_START_SIZE = 30;
 
   /* LEAPMOTION */
 
-  function onScreenTap( gesture ){
+  var onScreenTap = function(gesture) {
 
     var pos  = leapToScene( gesture.position );
     
@@ -432,7 +432,22 @@ var SCREENTAP_START_SIZE = 30;
     screenTaps.push( [ pos[0] , pos[1] , time ] );
 
     explosion.dropBomb({clientX: pos[0], clientY: pos[1]});
-  }
+  };
+
+  var onSwipe = function(gesture) {
+
+  	console.log(gesture.pointableIds.length);
+
+  	if (Math.abs(gesture.direction[1]) > Math.abs(gesture.direction[0])) {
+  		// swiping vertically
+
+  		if (gesture.direction[1] < 0) {
+  			window.scrollBy(0, gesture.speed);
+  		} else {
+  			window.scrollBy(0, -gesture.speed);
+  		}
+  	}
+  };
 
   // Creates our Leap Controller
   var controller = new Leap.Controller({enableGestures:true});
@@ -498,6 +513,9 @@ var SCREENTAP_START_SIZE = 30;
           onScreenTap( gesture );
           break;
             
+          case "swipe":
+          onSwipe(gesture);
+          break;
         }
 
       }
